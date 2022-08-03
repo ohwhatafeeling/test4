@@ -70,22 +70,27 @@ function create() {
 function update() {
   if (this.cursors.left.isDown) {
     this.player.setVelocityX(-200);
-    if (this.player.body.onFloor) {
-      this.player.play('run');
+    if (this.player.body.onFloor()) {
+      this.player.play('run', true);
     }
   } else if (this.cursors.right.isDown) {
     this.player.setVelocityX(200);
-    if (this.player.body.onFloor) {
-      this.player.play('run');
+    if (this.player.body.onFloor()) {
+      this.player.play('run', true);
     }
   } else {
     this.player.setVelocityX(0);
-    if (this.player.body.onFloor) {
-      this.player.play('idle');
+    if (this.player.body.onFloor()) {
+      this.player.play('idle', true);
     }
   }
   if ((this.cursors.up.isDown || this.cursors.space.isDown) && this.player.body.onFloor()) {
     this.player.setVelocityY(-350);
-    this.player.play('jump');
+    this.player.play('jump', true);
+  }
+  if (this.player.body.velocity.x > 0) {
+    this.player.setFlipX(false);
+  } else if (this.player.body.velocity.x < 0) {
+    this.player.setFlipX(true);
   }
 }
