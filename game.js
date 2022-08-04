@@ -85,14 +85,14 @@ function create() {
 
   this.anims.create({
     key: 'run',
-    frames: this.anims.generateFrameNumbers('maskDudeRun', {start: 0, end: 16}),
+    frames: this.anims.generateFrameNumbers('maskDudeRun', {start: 0, end: 10}),
     frameRate: 20,
     repeat: -1
   });
 
   this.anims.create({
     key: 'idle',
-    frames: this.anims.generateFrameNumbers('maskDudeIdle', {start: 0, end: 16}),
+    frames: this.anims.generateFrameNumbers('maskDudeIdle', {start: 0, end: 10}),
     frameRate: 20,
     repeat: -1
   });
@@ -104,7 +104,49 @@ function create() {
     repeat: -1
   });
 
+  this.anims.create({
+    key: 'applePlay',
+    frames: this.anims.generateFrameNumbers('apple', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
 
+  this.anims.create({
+    key: 'bananaPlay',
+    frames: this.anims.generateFrameNumbers('banana', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'cherryPlay',
+    frames: this.anims.generateFrameNumbers('cherry', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'kiwiPlay',
+    frames: this.anims.generateFrameNumbers('kiwi', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.apples.children.iterate(apple => {
+    apple.play('applePlay');
+  });
+
+  this.bananas.children.iterate(banana => {
+    banana.play('bananaPlay');
+  });
+
+  this.cherries.children.iterate(cherry => {
+    cherry.play('cherryPlay');
+  });
+
+  this.kiwis.children.iterate(kiwi => {
+    kiwi.play('kiwiPlay');
+  });
 
   this.cursors = this.input.keyboard.createCursorKeys();
 };
