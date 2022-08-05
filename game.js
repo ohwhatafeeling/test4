@@ -22,6 +22,12 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+var startX;
+var startY;
+var endX;
+var endY;
+var score = 0;
+var scoreText;
 
 function preload() {
   this.load.image('tiles', 'assets/Terrain/Terrain (16X16).png');
@@ -41,6 +47,8 @@ function create() {
   const platforms = map.createStaticLayer('PlatformLayer', tileset, 0, 0);
 
   platforms.setCollisionByExclusion(-1, true);
+
+  scoreText = this.add.text(96, 16, 'score: 0', {fontSize: '32px', fill: '#fff'});
 
   this.apples = this.physics.add.group({
     allowGravity: false,
@@ -78,7 +86,17 @@ function create() {
     const kiwiSprite = this.kiwis.create(kiwi.x, kiwi.y - 32, 'kiwi').setOrigin(0);
   });
 
-  this.player = this.physics.add.sprite(32, 32, 'maskDudeIdle');
+  map.getObjectLayer('StartEnd').objects.forEach(coordinate => {
+    if (coordinate.name == 'Start') {
+      startX = coordinate.x;
+      startY = coordinate.y;
+    } else if (coordinate.name == 'End') {
+      endX = coordinate.x;
+      endY = coordinate.y;
+    }
+  })
+
+  this.player = this.physics.add.sprite(startX, startY, 'maskDudeIdle');
   this.player.setBounce(0.1);
   this.player.setCollideWorldBounds(true);
   this.physics.add.collider(this.player, platforms);
@@ -148,6 +166,11 @@ function create() {
     kiwi.play('kiwiPlay');
   });
 
+  this.physics.add.overlap(this.player, this.apples, collectApple, null, this);
+  this.physics.add.overlap(this.player, this.bananas, collectBanana, null, this);
+  this.physics.add.overlap(this.player, this.cherries, collectCherry, null, this);
+  this.physics.add.overlap(this.player, this.kiwis, collectKiwi, null, this);
+
   this.cursors = this.input.keyboard.createCursorKeys();
 };
 
@@ -177,4 +200,32 @@ function update() {
   } else if (this.player.body.velocity.x < 0) {
     this.player.setFlipX(true);
   }
+  if ((((this.player.x + 16) > endX) && ((this.player.x - 16) < endX)) && (((this.player.y + 16) > endY) && ((this.player.y - 16) < endY))) {
+    this.player.disableBody(true, true);
+    scoreText.setText('GAME FINISHED.\nYour score: ' + score);
+  }
+}
+
+function collectApple(player, apple) {
+  apple.disableBody(true, true);
+  score += 10;
+  scoreText.setText('score: ' + score);
+}
+
+function collectBanana(player, banana) {
+  banana.disableBody(true, true);
+  score += 20;
+  scoreText.setText('score: ' + score);
+}
+
+function collectCherry(player, cherry) {
+  cherry.disableBody(true, true);
+  score += 30;
+  scoreText.setText('score: ' + score);
+}
+
+function collectKiwi(player, kiwi) {
+  kiwi.disableBody(true, true);
+  score += 40;
+  scoreText.setText('score: ' + score);
 }
